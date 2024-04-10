@@ -19,7 +19,7 @@ class Task:
     task_id_gen = task_id_generator()
 
     def __init__(self, priority, execution_time: int):
-        self.task_id = next(self.task_id_gen)
+        self.id = next(self.task_id_gen)
         self.state = TaskStates.SUSPENDED
         self.priority = priority
         self.execution_time = execution_time

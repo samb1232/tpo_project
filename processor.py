@@ -13,9 +13,9 @@ class Processor:
         while True:
             print("Processor clock")
             if self.scheduler.running_task is not None:
-                print(f"Running task №{self.scheduler.running_task.task_id}. "
+                print(f"Running task №{self.scheduler.running_task.id}. "
                       f"Progress: {self.scheduler.running_task.progress}/{self.scheduler.running_task.execution_time}")
                 if self.scheduler.running_task.execute():
-                    print(f"Task №{self.scheduler.running_task.task_id} done")
+                    print(f"Task №{self.scheduler.running_task.id} done")
                     self.scheduler.finish_task()
             time.sleep(0.3)

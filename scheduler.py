@@ -15,6 +15,7 @@ class Scheduler:
         self.running_task: Task | None = None
 
     def activate_task(self, task: Task) -> None:
+        print(f"Adding new task. ID: {task.id}, Priority: {task.priority}, TTE: {task.execution_time}")
         task.activate()
         if self.running_task is None:
             task.start()
