@@ -49,7 +49,6 @@ class Task:
     def terminate(self) -> None:
         assert self.state == TaskStates.RUNNING, f"Cannot terminate task. Current state is {self.state.name}, not RUNNING."
         self.state = TaskStates.SUSPENDED
-    #   TODO: Тут можно сбросить параметры задачи, чтобы потом её можно было запустить снова
 
     def execute(self) -> ReturnCommands:
         assert self.state == TaskStates.RUNNING, f"Cannot execute task. Current state is {self.state.name}, not RUNNING."
