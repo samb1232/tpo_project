@@ -2,7 +2,7 @@ import random
 import time
 
 from scheduler import Scheduler
-from task import Task
+from tasks import Task, ExtendedTask
 
 
 class TaskGenerator:
@@ -14,8 +14,16 @@ class TaskGenerator:
         while True:
             is_extended: bool = random.randint(0, 1) == 1
             if is_extended:
-                pass
-                # TODO: Сделать генерацию расширенных задач
+                execution_time = random.randint(3, 50)
+                wait_start_time = random.randint(2, execution_time - 1)
+                new_task = ExtendedTask(
+                    priority=random.randint(0, 3),
+                    execution_time=execution_time,
+                    should_wait=random.randint(0, 10) > 3,  # Для большего шанса выведения задачи в waiting
+                    wait_start_time=wait_start_time,
+                    wait_duration=random.randint(1, 15)
+                )
+                self.scheduler.activate_task(new_task)
             else:
                 new_task = Task(random.randint(0, 3), random.randint(3, 50))
                 self.scheduler.activate_task(new_task)
