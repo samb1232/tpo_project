@@ -18,7 +18,7 @@ class Scheduler:
         self.running_task: Task | ExtendedTask | None = None
 
     def activate_task(self, task: Task | ExtendedTask) -> None:
-        print(f"Activating new task. ID: {task.id}, Priority: {task.priority}, TTE: {task.execution_time}")
+        print(f"Activating new {task.type} task. ID: {task.id}, Priority: {task.priority}, TTE: {task.execution_time}")
         task.activate()
         if self.running_task is None:
             task.start()
@@ -49,6 +49,23 @@ class Scheduler:
         new_task.start()
         self.running_task = new_task
 
+    def wait_task(self) -> None:
+        self.running_task.wait()
+        self.waiting_tasks.append(self.running_task)
+        next_task = self.get_next_task()
+        self.running_task = next_task
+
+    def release_task(self, task: ExtendedTask) -> None:
+        print(f"Release task №{task.id} from waiting stage")
+        task.release()
+        if self.running_task is None:
+            task.start()
+            self.running_task = task
+        elif self.running_task.priority < task.priority:
+            self.swap_tasks(task)
+        else:
+            self.tasks_queues[task.priority].append(task)
+
     def run_waiting_tasks_listener(self) -> None:
         while True:
             index = 0
@@ -60,19 +77,3 @@ class Scheduler:
                 index += 1
 
             time.sleep(0.5)
-
-    def wait_task(self) -> None:
-        self.running_task.wait()
-        self.waiting_tasks.append(self.running_task)
-        next_task = self.get_next_task()
-        self.running_task = next_task
-
-    def release_task(self, task: ExtendedTask) -> None:
-        task.release()
-        if self.running_task is None:
-            task.start()
-            self.running_task = task
-        elif self.running_task.priority < task.priority:
-            self.swap_tasks(task)
-        else:
-            self.tasks_queues[task.priority].append(task)

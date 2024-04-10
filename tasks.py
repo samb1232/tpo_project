@@ -10,12 +10,13 @@ class TaskStates(Enum):
     WAITING = auto()
 
 
-class ReturnCommands(Enum):
+class TaskCommands(Enum):
     DONE = auto()
     NOT_DONE = auto()
     SHOULD_WAIT = auto()
 
 
+# Generate unique task IDs
 def task_id_generator():
     id_counter = 1
     while True:
@@ -28,11 +29,12 @@ class Task:
 
     def __init__(self, priority, execution_time: int):
         self.id = next(self.task_id_gen)
-        self.state = TaskStates.SUSPENDED
+        self.state = TaskStates.SUSPENDED # Initial state is suspended
         self.priority = priority
         self.execution_time = execution_time
 
         self.progress = 0
+        self.type = "BASIC"
 
     def activate(self) -> None:
         assert self.state == TaskStates.SUSPENDED, f"Cannot activate task. Current state is {self.state.name}, not SUSPENDED."
@@ -50,13 +52,13 @@ class Task:
         assert self.state == TaskStates.RUNNING, f"Cannot terminate task. Current state is {self.state.name}, not RUNNING."
         self.state = TaskStates.SUSPENDED
 
-    def execute(self) -> ReturnCommands:
+    def execute(self) -> TaskCommands:
         assert self.state == TaskStates.RUNNING, f"Cannot execute task. Current state is {self.state.name}, not RUNNING."
         self.progress += 1
 
         if self.progress >= self.execution_time:
-            return ReturnCommands.DONE
-        return ReturnCommands.NOT_DONE
+            return TaskCommands.DONE
+        return TaskCommands.NOT_DONE
 
 
 class ExtendedTask(Task):
@@ -67,18 +69,20 @@ class ExtendedTask(Task):
 
         self.should_wait = should_wait
         self.has_waited = False
-        self.wait_start_time = wait_start_time
+        self.wait_start_time = wait_start_time  # Time at which task should start waiting
         self.wait_duration = wait_duration
 
-    def execute(self) -> ReturnCommands:
+        self.type = "EXTENDED"
+
+    def execute(self) -> TaskCommands:
         assert self.state == TaskStates.RUNNING, f"Cannot execute task. Current state is {self.state.name}, not RUNNING."
         self.progress += 1
         if self.progress == self.wait_start_time:
             if self.should_wait:
-                return ReturnCommands.SHOULD_WAIT
+                return TaskCommands.SHOULD_WAIT
         if self.progress >= self.execution_time:
-            return ReturnCommands.DONE
-        return ReturnCommands.NOT_DONE
+            return TaskCommands.DONE
+        return TaskCommands.NOT_DONE
 
     def wait(self) -> None:
         assert self.state == TaskStates.RUNNING, f"Cannot wait task. Current state is {self.state.name}, not RUNNING."

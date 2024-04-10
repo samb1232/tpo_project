@@ -6,7 +6,7 @@ from tasks import Task, ExtendedTask
 from task_generator import TaskGenerator
 
 scheduler = Scheduler()
-processor = Processor(scheduler)
+processor = Processor(scheduler, 0.1)
 task_generator = TaskGenerator(scheduler)
 
 if __name__ == "__main__":
