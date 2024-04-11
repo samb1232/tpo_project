@@ -12,6 +12,13 @@ class Processor:
         self.speed = speed  # Период работы процессора, в секундах
 
     def run(self):
+        """
+        Главный цикл процессора.
+        В бесконечном цикле, в зависимости от состояния sceduler.current_task выполняется задача.
+        Если задача выполнена или уходит в ожидание, вызывает соответствующие функции в sceduler.
+
+        Следует запускать в отдельном потоке.
+        """
         while True:
             print("Processor clock:", end=" ")
             if self.scheduler.running_task is not None:

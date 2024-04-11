@@ -75,6 +75,10 @@ class ExtendedTask(Task):
         self.type = "EXTENDED"
 
     def execute(self) -> TaskCommands:
+        """
+        Имитирует процесс выполнения задачи.
+
+        """
         assert self.state == TaskStates.RUNNING, f"Cannot execute task. Current state is {self.state.name}, not RUNNING."
         self.progress += 1
         if self.progress == self.wait_start_time:
@@ -85,11 +89,17 @@ class ExtendedTask(Task):
         return TaskCommands.NOT_DONE
 
     def wait(self) -> None:
+        """
+        Переводит задачу режим ожидания.
+        """
         assert self.state == TaskStates.RUNNING, f"Cannot wait task. Current state is {self.state.name}, not RUNNING."
         self.state = TaskStates.WAITING
         threading.Thread(target=self.wait_task, daemon=True).start()
 
     def wait_task(self):
+        """
+        Ждёт определённое время и запускает флаг has_waited.
+        """
         self.has_waited = False
         time.sleep(self.wait_duration)
         self.has_waited = True
