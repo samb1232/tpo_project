@@ -33,13 +33,13 @@ class Task:
     task_id_gen = task_id_generator()
 
     def __init__(self, priority, execution_time: int):
-        self.id = next(self.task_id_gen)
-        self.state = TaskStates.SUSPENDED  # Initial state is suspended
-        self.priority = priority
-        self.execution_time = execution_time
+        self.id: int = next(self.task_id_gen)
+        self.state: TaskStates = TaskStates.SUSPENDED  # Initial state is suspended
+        self.priority: int = priority
+        self.execution_time: int = execution_time
 
-        self.progress = 0
-        self.type = TaskTypes.BASIC.name
+        self.progress: int = 0
+        self.type: str = TaskTypes.BASIC.name
 
     def activate(self) -> None:
         assert self.state == TaskStates.SUSPENDED, f"Cannot activate task. Current state is {self.state.name}, not SUSPENDED."
@@ -67,15 +67,15 @@ class Task:
 
 
 class ExtendedTask(Task):
-    def __init__(self, priority, execution_time: int, should_wait: bool, wait_start_time: int, wait_duration: int):
+    def __init__(self, priority, execution_time: int, should_wait: bool, wait_start_time: int, wait_duration: float):
         super().__init__(priority, execution_time)
         if wait_start_time >= execution_time:
             raise AttributeError("Cannot create Extended Task. wait_start_time should be lower than execution_time")
 
-        self.should_wait = should_wait
-        self.has_waited = False
-        self.wait_start_time = wait_start_time  # Time at which task should start waiting
-        self.wait_duration = wait_duration
+        self.should_wait: bool = should_wait
+        self.has_waited: bool = False
+        self.wait_start_time: int = wait_start_time  # Time at which task should start waiting
+        self.wait_duration: float = wait_duration
 
         self.type = TaskTypes.EXTENDED.name
 
