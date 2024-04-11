@@ -3,6 +3,11 @@ import time
 from enum import Enum, auto
 
 
+class TaskTypes(Enum):
+    BASIC = auto()
+    EXTENDED = auto()
+
+
 class TaskStates(Enum):
     RUNNING = auto()
     READY = auto()
@@ -29,12 +34,12 @@ class Task:
 
     def __init__(self, priority, execution_time: int):
         self.id = next(self.task_id_gen)
-        self.state = TaskStates.SUSPENDED # Initial state is suspended
+        self.state = TaskStates.SUSPENDED  # Initial state is suspended
         self.priority = priority
         self.execution_time = execution_time
 
         self.progress = 0
-        self.type = "BASIC"
+        self.type = TaskTypes.BASIC.name
 
     def activate(self) -> None:
         assert self.state == TaskStates.SUSPENDED, f"Cannot activate task. Current state is {self.state.name}, not SUSPENDED."
@@ -72,7 +77,7 @@ class ExtendedTask(Task):
         self.wait_start_time = wait_start_time  # Time at which task should start waiting
         self.wait_duration = wait_duration
 
-        self.type = "EXTENDED"
+        self.type = TaskTypes.EXTENDED.name
 
     def execute(self) -> TaskCommands:
         """
