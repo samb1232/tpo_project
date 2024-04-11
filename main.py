@@ -5,7 +5,7 @@ from scheduler import Scheduler
 from task_generator import TaskGenerator
 
 scheduler = Scheduler()
-processor = Processor(scheduler, 0.1)
+processor = Processor(scheduler, 1)
 task_generator = TaskGenerator(scheduler)
 
 if __name__ == "__main__":

@@ -16,7 +16,8 @@ class TaskGenerator:
 
         Следует запускать в отдельном потоке.
         """
-        while True:
+        self.working_flag = True
+        while self.working_flag:
             is_extended: bool = random.randint(0, 1) == 1
             if is_extended:
                 execution_time = random.randint(3, 50)
@@ -36,3 +37,6 @@ class TaskGenerator:
                 )
                 self.scheduler.activate_task(new_task)
             time.sleep(random.randint(3, 10))
+
+    def stop(self):
+        self.working_flag = False
