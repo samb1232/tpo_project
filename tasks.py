@@ -67,7 +67,8 @@ class Task:
 
 
 class ExtendedTask(Task):
-    def __init__(self, priority, execution_time: int, should_wait: bool, wait_start_time: int, wait_duration: float):
+    def __init__(self, priority, execution_time: int, should_wait: bool = False, wait_start_time: int = 0,
+                 wait_duration: float = 1):
         super().__init__(priority, execution_time)
         if wait_start_time >= execution_time:
             raise AttributeError("Cannot create Extended Task. wait_start_time should be lower than execution_time")

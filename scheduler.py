@@ -19,7 +19,7 @@ class Scheduler:
 
     def activate_task(self, task: Task | ExtendedTask) -> None:
         """
-        Акривирует suspended задачу, добовляет её в очередь на выполнение.
+        Активирует подвешенную задачу, добавляет её в очередь на выполнение.
         """
 
         print(f"Activating new {task.type} task. ID: {task.id}, Priority: {task.priority}, TTE: {task.execution_time}")
